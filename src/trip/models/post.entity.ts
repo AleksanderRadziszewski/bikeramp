@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('trip_post')
-export class TripPostEntity {
+@Entity('trips')
+export class TripEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,4 +19,7 @@ export class TripPostEntity {
 
   @Column({ default: 0, type: 'float' })
   distance: number;
+
+  @Column({ default: 0, type: 'float' })
+  duration: number;
 }

@@ -5,4 +5,5 @@ export class TripPost {
   date: Date;
   price: number;
   distance: number;
+  duration: number;
 }
