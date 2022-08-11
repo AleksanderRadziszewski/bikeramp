@@ -19,4 +19,7 @@ export class TripPostEntity {
 
   @Column({ default: 0, type: 'float' })
   distance: number;
+
+  @Column({ default: 0, type: 'float' })
+  duration: number;
 }
