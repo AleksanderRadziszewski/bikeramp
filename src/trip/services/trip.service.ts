@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TripPostEntity } from '../models/post.entity';
+import { TripEntity } from '../../models/post.entity';
 import { TripPost } from '../dto/create-trip.dto';
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
@@ -11,13 +11,15 @@ import * as _ from 'lodash';
 @Injectable()
 export class TripService {
   constructor(
-    @InjectRepository(TripPostEntity)
-    private readonly tripPostRepository: Repository<TripPostEntity>,
+    @InjectRepository(TripEntity)
+    private readonly tripRepository: Repository<TripEntity>,
     private readonly httpService: HttpService,
   ) {}
 
-  async createPost(tripPost: TripPost): Promise<TripPost & TripPostEntity> {
-    const distance_data = await lastValueFrom(
+  async createPost(
+    tripPost: TripPost & TripEntity,
+  ): Promise<TripPost & TripEntity> {
+    const distanceDurationData = await lastValueFrom(
       this.httpService
         .get(
           encodeURI(
@@ -31,9 +33,16 @@ export class TripService {
         ),
     );
     const distance =
-      _.get(distance_data, 'rows[0].elements[0].distance.value') / 1000;
-    tripPost.distance = parseFloat(distance.toFixed(2));
+      _.get(distanceDurationData, 'rows[0].elements[0].distance.value') / 1000;
 
-    return this.tripPostRepository.save(tripPost);
+    const duration = _.get(
+      distanceDurationData,
+      'rows[0].elements[0].duration.value',
+    );
+    tripPost.distance = parseFloat(distance.toFixed(2));
+    tripPost.duration = parseFloat(duration.toFixed(2));
+    tripPost.price = parseFloat((distance * 3).toFixed(2));
+
+    return this.tripRepository.save(tripPost);
   }
 }
