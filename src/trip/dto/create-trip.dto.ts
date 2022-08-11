@@ -4,5 +4,4 @@ export class TripPost {
   destination_address: string;
   date: Date;
   price: number;
-  distance: number;
 }
