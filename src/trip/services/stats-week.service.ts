@@ -5,7 +5,7 @@ import { Repository, MoreThan } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
 
 @Injectable()
-export class StatsService {
+export class StatsWeekService {
   constructor(
     @InjectRepository(TripEntity)
     private readonly tripRepository: Repository<TripEntity>,
